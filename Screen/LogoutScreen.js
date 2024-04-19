@@ -11,10 +11,12 @@ import {
 } from '../GlobalStyles/GlobalStyles.js';
 import {storage} from '../Utils/LocalStorage.js';
 import {coin, coinicon} from '../images/img/Allimg.js';
+import {useCoinContext} from '../Coin/CoinContext.js';
 
 const LogoutScreen = ({navigation}) => {
   const [userData, setUserData] = useState(null);
-  const [totalCoins, setTotalCoins] = useState(0);
+
+  const {totalCoins} = useCoinContext();
 
   useEffect(() => {
     const checkUserAuthentication = async () => {
@@ -37,29 +39,12 @@ const LogoutScreen = ({navigation}) => {
     });
   }, []);
 
-  useEffect(() => {
-    const fetchTotalCoins = async () => {
-      try {
-        const user = auth().currentUser;
-        if (user) {
-          const userDocRef = firestore().collection('users').doc(user.uid);
-          userDocRef.onSnapshot(snapshot => {
-            const userData = snapshot.data();
-            if (userData) {
-              setTotalCoins(userData.coin);
-            }
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching total coins:', error);
-      }
-    };
-
-    fetchTotalCoins();
-  }, []);
-
   const TermsAndCondition = () => {
     navigation.navigate('Terms');
+  };
+
+  const Withdraw = () => {
+    navigation.navigate('Withdraw');
   };
 
   const signOut = async () => {
@@ -71,6 +56,7 @@ const LogoutScreen = ({navigation}) => {
         await auth().signOut();
         await storage.clearAll();
         navigation.navigate('Main');
+        console.log('logout succesfully');
       } else {
         Alert.alert('Error', 'You are not signed in.');
       }
@@ -110,7 +96,9 @@ const LogoutScreen = ({navigation}) => {
           <Image
             style={styles.userprofilepageItem}
             resizeMode="cover"
-            source={{uri: userData.photo}}
+            source={{
+              uri: userData.photo || 'https://picsum.photos/200/300/?blur',
+            }}
           />
           <View>
             <View style={styles.rectangleParent}>
@@ -121,7 +109,8 @@ const LogoutScreen = ({navigation}) => {
             </View>
             <View style={[styles.userprofilepageChild1, styles.childLayout]} />
             <Text
-              style={[styles.withdraw, styles.logoutTypo]}>{`Withdraw `}</Text>
+              style={[styles.withdraw, styles.logoutTypo]}
+              onPress={Withdraw}>{`Withdraw `}</Text>
             <View style={[styles.groupParent, styles.parentLayout]}>
               <View style={[styles.kParent, styles.parentLayout]}>
                 <Text style={[styles.k, styles.kTypo]}>

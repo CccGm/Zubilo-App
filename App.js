@@ -14,6 +14,7 @@ import {storage} from './Utils/LocalStorage';
 import UpdateModal from './src/components/UpdateModal';
 import {CoinProvider} from './Coin/CoinContext';
 import TermsAndConditions from './Screen/TermsAndCondition';
+import WithDraw from './Screen/WithDraw';
 
 const Stack = createNativeStackNavigator();
 
@@ -82,10 +83,12 @@ export default function App() {
           <Stack.Screen name="Home4" component={Home4} />
           <Stack.Screen name="SignIn" component={LogoutScreen} />
           <Stack.Screen name="Terms" component={TermsAndConditions} />
-          <Stack.Screen
-            name="Update"
-            component={() => <UpdateModal updatedVersion={updatedVersion} />}
-          />
+          <Stack.Screen name="Withdraw" component={WithDraw} />
+          <Stack.Screen name="Update">
+            {props => (
+              <UpdateModal {...props} updatedVersion={updatedVersion} />
+            )}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     </CoinProvider>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Share } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, Button, Share} from 'react-native';
 import firebase from '@react-native-firebase/app';
 import '@react-native-firebase/firestore'; // Import Firestore module
 
@@ -12,7 +12,10 @@ const Referlink = () => {
       try {
         const user = firebase.auth().currentUser;
         if (user) {
-          const userRef = firebase.firestore().collection('users').doc(user.uid);
+          const userRef = firebase
+            .firestore()
+            .collection('users')
+            .doc(user.email);
           const doc = await userRef.get();
           if (doc.exists) {
             const userData = doc.data();

@@ -25,7 +25,6 @@ import {Telegram, coin} from '../images/img/Allimg';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const [coinCount, setCoinCount] = useState(300);
   const [lastSpinTime, setLastSpinTime] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [loaded, setLoaded] = useState(false);
@@ -33,9 +32,15 @@ export default function HomeScreen() {
   const [showInterstitial1, setShowInterstitial1] = useState(false);
   const spinValue = useRef(new Animated.Value(0)).current;
   const {addCoins} = useCoinContext();
-  const adUnit = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
-  const adUnit2 = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
-  const adUnit3 = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
+  const adUnit = __DEV__
+    ? TestIds.BANNER
+    : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
+  const adUnit2 = __DEV__
+    ? TestIds.INTERSTITIAL
+    : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
+  const adUnit3 = __DEV__
+    ? TestIds.INTERSTITIAL
+    : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
 
   // const adUnit = __DEV__ ? TestIds.BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
   // const adUnit2 = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
@@ -166,7 +171,7 @@ export default function HomeScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.homepagemain}>
-        <Totalcoin coinCount={coinCount} />
+        <Totalcoin />
         <View style={styles.zubiloParent}>
           <Text style={styles.textheading}>Zubilo</Text>
           <Animated.Image

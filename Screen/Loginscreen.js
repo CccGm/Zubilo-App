@@ -22,7 +22,7 @@ const Loginscreen = () => {
   const [referralCode, setReferralCode] = useState('');
   const navigation = useNavigation();
   const [error, setError] = useState(null);
-  const {userEmail, updateUserEmail} = useCoinContext();
+  const {setUserEmail, useRreferralCode, getUser} = useCoinContext();
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -54,12 +54,12 @@ const Loginscreen = () => {
         return;
       }
 
-      await writeToFirestore(user, mobileNumber, referralCode);
+      await writeToFirestore(user);
 
       await storage.set('userToken', idToken);
       await storage.set('userInfo', JSON.stringify(user));
 
-      updateUserEmail(user?.email);
+      setUserEmail(user?.email);
       navigation.navigate('Homemain');
     } catch (error) {
       console.error('Google sign in error:', error);
@@ -83,7 +83,7 @@ const Loginscreen = () => {
     }
   };
 
-  const writeToFirestore = async (user, mobileNumber, referralCode) => {
+  const writeToFirestore = async user => {
     try {
       if (!user || !user.email) {
         console.error('User data is incomplete or undefined:', user);
@@ -91,16 +91,23 @@ const Loginscreen = () => {
       }
 
       const userData = {
+        coin: 0,
         email: user.email,
         displayName: user.name || '',
         mobileNumber: mobileNumber,
-        referralCode: referralCode || '',
+        referralCode: useRreferralCode,
+        loginreferralCode: referralCode || '',
       };
 
       const querySnapshot = await firestore()
         .collection('users')
         .where('email', '==', user.email)
         .get();
+
+      querySnapshot.forEach(data => {
+        console.log(data.id, '=>', data.data());
+      });
+      getUser(user.email);
       if (!querySnapshot.empty) {
         console.error('User with this email already exists in Firestore.');
         return;
