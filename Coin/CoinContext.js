@@ -13,6 +13,7 @@ export const CoinProvider = ({children}) => {
   const [userEmail, setUserEmail] = useState('');
   const [userDataStoredLocally, setUserDataStoredLocally] = useState(false);
   const [useRreferralCode, setReferralCode] = useState('');
+  const [adsShow, setAdsShow] = useState(true);
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async user => {
@@ -35,7 +36,7 @@ export const CoinProvider = ({children}) => {
     if (userEmail !== '') {
       getUser(userEmail);
     }
-
+    ADSSHOW();
     generateReferralCode();
 
     return unsubscribe;
@@ -171,6 +172,18 @@ export const CoinProvider = ({children}) => {
     }
   };
 
+  const ADSSHOW = async () => {
+    const versionsSnapshot = await firestore().collection('versions').get();
+    if (!versionsSnapshot.empty) {
+      const versionData = versionsSnapshot.docs[0].data();
+      const show = versionData.ads;
+      setAdsShow(show);
+    } else {
+      console.warn('No ads documents found');
+      setAdsShow(false);
+    }
+  };
+
   return (
     <CoinContext.Provider
       value={{
@@ -182,6 +195,7 @@ export const CoinProvider = ({children}) => {
         setUserEmail,
         useRreferralCode,
         withDrawMoney,
+        adsShow,
       }}>
       {children}
     </CoinContext.Provider>

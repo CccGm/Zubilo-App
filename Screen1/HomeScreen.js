@@ -31,7 +31,7 @@ export default function HomeScreen() {
   const [showInterstitial, setShowInterstitial] = useState(false);
   const [showInterstitial1, setShowInterstitial1] = useState(false);
   const spinValue = useRef(new Animated.Value(0)).current;
-  const {addCoins} = useCoinContext();
+  const {addCoins, adsShow} = useCoinContext();
   const adUnit = __DEV__
     ? TestIds.BANNER
     : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyy';
@@ -205,16 +205,17 @@ export default function HomeScreen() {
             </Text>
           </View>
         )}
-
-        <View style={styles.containertellgramadvertise}>
-          <BannerAd
-            unitId={adUnit}
-            size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-            requestOtions={{
-              requestNonPersonalizedAdsOnly: true,
-            }}
-          />
-        </View>
+        {adsShow && (
+          <View style={styles.containertellgramadvertise}>
+            <BannerAd
+              unitId={adUnit}
+              size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+              requestOtions={{
+                requestNonPersonalizedAdsOnly: true,
+              }}
+            />
+          </View>
+        )}
 
         <View style={styles.buttonContainer}>
           <Text style={styles.textmore}>
